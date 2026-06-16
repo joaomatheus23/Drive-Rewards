@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "DrivenRewards",
+    "slug": "driven-rewards",
+    "version": "1.0.0",
+    "scheme": "drivenrewards",
+    "orientation": "portrait",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "DrivenRewards tracks your route to detect routines and send nearby partner offers.",
+          "isAndroidBackgroundLocationEnabled": true,
+          "isIosBackgroundLocationEnabled": true
+        }
+      ],
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "DrivenRewards needs access to your photos for your profile picture.",
+          "cameraPermission": "DrivenRewards needs the camera to scan QR codes at partner locations."
+        }
+      ],
+      "expo-notifications",
+      "expo-video"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
