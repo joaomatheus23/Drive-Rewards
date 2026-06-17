@@ -4,7 +4,7 @@ import { userRoutes } from "./users.routes.js";
 import { partnerRoutes } from "./partners.routes.js";
 import { couponRoutes } from "./coupons.routes.js";
 import { redemptionRoutes } from "./redemptions.routes.js";
-import { sessionRoutes } from "./sessions.routes.js";
+import { sessionRoutes } from "./sessions/index.js";
 import { routineRoutes } from "./routines.routes.js";
 import { notificationRoutes } from "./notifications.routes.js";
 import { adminRoutes } from "./admin.routes.js";

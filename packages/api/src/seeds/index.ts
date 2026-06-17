@@ -40,9 +40,17 @@ async function seed(): Promise<void> {
       role: "partner_owner",
       points: 0,
     },
+    {
+      name: "Alex Staff",
+      email: "staff@cafe.example.com",
+      passwordHash,
+      role: "partner_staff",
+      points: 0,
+    },
   ]);
 
   const owner = users[2]!;
+  const staff = users[3]!;
   void users[0];
   void users[1];
 
@@ -69,21 +77,45 @@ async function seed(): Promise<void> {
   });
 
   await User.findByIdAndUpdate(owner._id, { partnerId: partner._id });
+  await User.findByIdAndUpdate(staff._id, { partnerId: partner._id });
 
-  await Coupon.create({
-    partnerId: partner._id,
-    title: "20% off any drink",
-    type: "percentage",
-    value: 20,
-    expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-    redemptionLimit: 100,
-    isActive: true,
-  });
+  await Coupon.create([
+    {
+      partnerId: partner._id,
+      title: "20% off any drink",
+      type: "percentage",
+      value: 20,
+      category: "cafe",
+      minDriverLevel: "any",
+      bonusPoints: 30,
+      terms: ["Valid for one drink per visit", "Cannot combine with other offers"],
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      redemptionLimit: 100,
+      isActive: true,
+      isFeatured: true,
+    },
+    {
+      partnerId: partner._id,
+      title: "Free pastry with any coffee",
+      type: "free_item",
+      value: 0,
+      category: "cafe",
+      minDriverLevel: "silver",
+      bonusPoints: 40,
+      terms: ["One per driver per day", "While supplies last"],
+      availableHoursStart: "06:00",
+      availableHoursEnd: "11:00",
+      expiresAt: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+      redemptionLimit: 50,
+      isActive: true,
+    },
+  ]);
 
   console.log("[seed] Done.");
   console.log(`  Admin:  admin@drivenrewards.ca / password123`);
   console.log(`  Driver: driver@example.com / password123`);
   console.log(`  Owner:  owner@cafe.example.com / password123`);
+  console.log(`  Staff:  staff@cafe.example.com / password123`);
 
   await disconnectDatabase();
 }

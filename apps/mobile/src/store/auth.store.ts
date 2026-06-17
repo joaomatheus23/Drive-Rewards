@@ -105,7 +105,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   navigateByRole: (role) => {
-    if (role === "partner_staff") {
+    if (role === "partner_staff" || role === "partner_owner") {
       router.replace("/(staff)/scanner");
       return;
     }

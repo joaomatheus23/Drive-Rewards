@@ -14,6 +14,8 @@ export interface IUser {
     model?: string;
     year?: number;
     licensePlate?: string;
+    fuelConsumptionL100km?: number;
+    depreciationRatePerKm?: number;
   };
   fcmToken?: string;
   refreshTokenHash?: string;

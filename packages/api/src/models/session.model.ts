@@ -1,24 +1,42 @@
+/**
+ * Session Mongoose model
+ * Role: api
+ * Entry: session persistence layer
+ * Exit: typed Session documents for queries and mutations
+ */
 import mongoose, { Schema, type Document, type Model } from "mongoose";
-import type { IGpsPoint, ISession } from "@driven-rewards/shared";
+import type {
+  IGpsPoint,
+  ISession,
+  ISessionVehicleSnapshot,
+  SessionPlatform,
+  SessionStatus,
+  TripPurpose,
+} from "@driven-rewards/shared";
 
-/** Embedded GPS point subdocument (no separate collection) */
 const gpsPointSchema = new Schema<IGpsPoint>(
   {
-    /** Latitude in decimal degrees */
     lat: { type: Number, required: true, min: -90, max: 90 },
-    /** Longitude in decimal degrees */
     lng: { type: Number, required: true, min: -180, max: 180 },
-    /** Speed in m/s at time of recording */
     speed: { type: Number, min: 0 },
-    /** Heading in degrees (0–360) */
+    accuracy: { type: Number, min: 0 },
     heading: { type: Number, min: 0, max: 360 },
-    /** Timestamp when coordinate was captured */
+    altitude: { type: Number },
     recordedAt: { type: Date, required: true, default: Date.now },
   },
   { _id: false },
 );
 
-/** Mongoose document interface for Session */
+const vehicleSnapshotSchema = new Schema<ISessionVehicleSnapshot>(
+  {
+    vehicleType: { type: String },
+    licensePlate: { type: String },
+    fuelConsumptionL100km: { type: Number, required: true, min: 1 },
+    depreciationRatePerKm: { type: Number, required: true, min: 0 },
+  },
+  { _id: false },
+);
+
 export interface SessionDocument
   extends Omit<ISession, "_id" | "userId">,
     Document {
@@ -27,35 +45,50 @@ export interface SessionDocument
 
 const sessionSchema = new Schema<SessionDocument>(
   {
-    /** Driver who owns this session */
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
-    /** Total distance driven in this session (km) */
-    km: { type: Number, default: 0, min: 0 },
-    /** Points earned during this session */
-    points: { type: Number, default: 0, min: 0 },
-    /** Session start time */
+    status: {
+      type: String,
+      enum: ["active", "paused", "completed"],
+      default: "active",
+      index: true,
+    },
+    platform: {
+      type: String,
+      enum: ["uber", "lyft", "doordash", "skip", "ubereats", "manual"],
+    },
     startedAt: { type: Date, required: true, default: Date.now, index: true },
-    /** Session end time (null while active) */
     endedAt: { type: Date },
-    /** Array of GPS coordinates recorded during the drive */
     gpsPoints: { type: [gpsPointSchema], default: [] },
-    /** Whether session is currently being tracked */
+    distanceKm: { type: Number, default: 0, min: 0 },
+    durationMinutes: { type: Number, default: 0, min: 0 },
+    grossEarnings: { type: Number, default: 0, min: 0 },
+    fuelCostCAD: { type: Number, default: 0, min: 0 },
+    depreciationCostCAD: { type: Number, default: 0, min: 0 },
+    netProfitCAD: { type: Number, default: 0 },
+    profitPerKm: { type: Number, default: 0 },
+    profitPerHour: { type: Number, default: 0 },
+    pointsEarned: { type: Number, default: 0, min: 0 },
+    deviceId: { type: String, required: true, trim: true },
+    tripHash: { type: String, required: true, index: true },
+    isDriver: { type: Boolean, default: true },
+    fraudFlags: { type: [String], default: [] },
+    tripPurpose: {
+      type: String,
+      enum: ["work", "personal", "mixed"],
+    },
+    craEligibleKm: { type: Number, default: 0, min: 0 },
+    vehicleSnapshot: { type: vehicleSnapshotSchema, required: true },
     isActive: { type: Boolean, default: true, index: true },
+    km: { type: Number, default: 0, min: 0 },
+    points: { type: Number, default: 0, min: 0 },
   },
   { timestamps: true },
 );
 
-/** Index for routine detection queries (sessions by user + time range) */
 sessionSchema.index({ userId: 1, startedAt: -1 });
-sessionSchema.index({ userId: 1, isActive: 1 });
+sessionSchema.index({ userId: 1, status: 1 });
+sessionSchema.index({ tripHash: 1 }, { unique: true, sparse: true });
 
-/** Virtual: session duration in minutes */
-sessionSchema.virtual("durationMinutes").get(function (this: SessionDocument) {
-  if (!this.endedAt) return null;
-  return Math.round((this.endedAt.getTime() - this.startedAt.getTime()) / 60_000);
-});
-
-/** Virtual: GPS point count */
 sessionSchema.virtual("gpsPointCount").get(function (this: SessionDocument) {
   return this.gpsPoints.length;
 });

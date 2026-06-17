@@ -6,6 +6,7 @@
  */
 import { BlurView } from "expo-blur";
 import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
+import { BlurIntensity, Radius } from "../../theme";
 
 export type GlassTint = "light" | "dark" | "default";
 
@@ -19,23 +20,20 @@ export interface GlassSurfaceProps {
   borderColor?: string;
 }
 
+const DEFAULT_BORDER = "rgba(255,255,255,0.20)";
+const DEFAULT_OVERLAY = "rgba(255,255,255,0.08)";
+
 export function GlassSurface({
   children,
-  borderRadius = 14,
+  borderRadius = Radius.input,
   style,
-  intensity = 55,
+  intensity = BlurIntensity.glassSurface,
   tint = "dark",
-  overlayColor = "rgba(255,255,255,0.08)",
-  borderColor = "rgba(255,255,255,0.20)",
+  overlayColor = DEFAULT_OVERLAY,
+  borderColor = DEFAULT_BORDER,
 }: GlassSurfaceProps) {
   return (
-    <View
-      style={[
-        styles.shell,
-        { borderRadius, borderColor },
-        style,
-      ]}
-    >
+    <View style={[styles.shell, { borderRadius, borderColor }, style]}>
       <BlurView intensity={intensity} tint={tint} style={StyleSheet.absoluteFillObject} />
       <View
         pointerEvents="none"

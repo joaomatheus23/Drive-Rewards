@@ -27,11 +27,22 @@
           "cameraPermission": "DrivenRewards needs the camera to scan QR codes at partner locations."
         }
       ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "DrivenRewards needs the camera to scan QR codes at partner locations."
+        }
+      ],
       "expo-notifications",
-      "expo-video"
+      "expo-video",
+      "expo-font"
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "autolinkingModuleResolution": true
+    },
+    "ios": {
+      "bundleIdentifier": "com.joaomatheus02.driven-rewards"
     }
   }
 }

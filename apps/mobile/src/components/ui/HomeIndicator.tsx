@@ -5,6 +5,7 @@
  * Exit: display-only home indicator pill
  */
 import { Platform, StyleSheet, View } from "react-native";
+import { Layout } from "../../theme";
 
 export interface HomeIndicatorProps {
   visible?: boolean;
@@ -24,14 +25,14 @@ export function HomeIndicator({ visible = true }: HomeIndicatorProps) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 34,
+    height: Layout.homeIndicator.containerHeight,
     alignItems: "center",
     justifyContent: "center",
   },
   pill: {
-    width: 134,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: "rgba(255,255,255,0.38)",
+    width: Layout.homeIndicator.width,
+    height: Layout.homeIndicator.height,
+    borderRadius: Layout.homeIndicator.borderRadius,
+    backgroundColor: Layout.homeIndicator.color,
   },
 });

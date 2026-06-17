@@ -196,7 +196,7 @@ export default function LoginScreen() {
                   labelVariant="auth"
                   value={form.email}
                   onChangeText={(v) => updateField("email", v)}
-                  placeholder="marcus@email.com"
+                  placeholder="youremail@example.com"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}

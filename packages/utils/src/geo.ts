@@ -1,6 +1,22 @@
 import { ROUTINE } from "./constants.js";
 
 const EARTH_RADIUS_METERS = 6_371_000;
+const EARTH_RADIUS_KM = 6_371;
+
+/** Haversine distance between two coordinates in kilometers */
+export function haversineKm(
+  p1: { lat: number; lng: number },
+  p2: { lat: number; lng: number },
+): number {
+  const dLat = ((p2.lat - p1.lat) * Math.PI) / 180;
+  const dLng = ((p2.lng - p1.lng) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((p1.lat * Math.PI) / 180) *
+      Math.cos((p2.lat * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
+  return EARTH_RADIUS_KM * 2 * Math.asin(Math.sqrt(a));
+}
 
 /** Haversine distance between two coordinates in meters */
 export function haversineDistanceMeters(

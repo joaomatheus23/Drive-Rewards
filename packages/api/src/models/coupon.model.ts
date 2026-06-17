@@ -6,6 +6,14 @@ export interface CouponDocument
   extends Omit<ICoupon, "_id" | "partnerId">,
     Document {
   partnerId: mongoose.Types.ObjectId;
+  category?: string;
+  minDriverLevel?: string;
+  bonusPoints?: number;
+  terms?: string[];
+  availableHoursStart?: string;
+  availableHoursEnd?: string;
+  isFeatured?: boolean;
+  maxUsesPerUser?: number;
 }
 
 const couponSchema = new Schema<CouponDocument>(
@@ -39,6 +47,38 @@ const couponSchema = new Schema<CouponDocument>(
     redemptionCount: { type: Number, default: 0, min: 0 },
     /** Whether coupon is currently offered to drivers */
     isActive: { type: Boolean, default: true, index: true },
+    /** Partner business category for UI */
+    category: {
+      type: String,
+      enum: [
+        "cafe",
+        "gas_station",
+        "restaurant",
+        "repair_shop",
+        "car_wash",
+        "tire_shop",
+        "grocery",
+        "other",
+      ],
+      default: "other",
+    },
+    /** Minimum driver level required */
+    minDriverLevel: {
+      type: String,
+      enum: ["any", "bronze", "silver", "gold", "platinum"],
+      default: "any",
+    },
+    /** Bonus points awarded on successful redemption */
+    bonusPoints: { type: Number, default: 25, min: 0 },
+    /** Terms bullet points */
+    terms: { type: [String], default: [] },
+    /** Optional hours restriction (HH:mm) */
+    availableHoursStart: { type: String },
+    availableHoursEnd: { type: String },
+    /** Featured placement in driver app */
+    isFeatured: { type: Boolean, default: false },
+    /** Max redemptions per driver (0 = unlimited) */
+    maxUsesPerUser: { type: Number, default: 1, min: 0 },
   },
   { timestamps: true },
 );

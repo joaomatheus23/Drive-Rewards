@@ -24,6 +24,19 @@ const redemptionSchema = new Schema<RedemptionDocument>(
     stripeTransferId: { type: String },
     /** Timestamp when driver scanned/redeemed at partner */
     redeemedAt: { type: Date, required: true, default: Date.now, index: true },
+    /** Redemption lifecycle for QR flow */
+    status: {
+      type: String,
+      enum: ["pending", "confirmed", "expired"],
+      default: "pending",
+      index: true,
+    },
+    /** QR payload token */
+    qrToken: { type: String, index: true },
+    /** When the QR code expires */
+    qrExpiresAt: { type: Date },
+    /** Bonus points granted on confirmation */
+    bonusPoints: { type: Number, default: 0, min: 0 },
   },
   { timestamps: true },
 );

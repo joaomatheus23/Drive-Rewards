@@ -11,7 +11,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import { SpringConfig, Colors, Radius, Spacing, Typography } from "../../theme";
+import { SpringConfig, Colors, Layout, Radius, Spacing, Typography } from "../../theme";
 import { useHaptic } from "../../hooks/useHaptic";
 
 export interface TabBarItem {
@@ -76,7 +76,7 @@ function TabButton({ tab, active, onPress }: TabButtonProps) {
 export function TabBar({ tabs, activeKey, onTabPress }: TabBarProps) {
   return (
     <View style={styles.wrapper}>
-      <BlurView intensity={85} tint="dark" style={styles.blur}>
+      <BlurView intensity={Layout.tabBar.blurIntensity} tint="dark" style={styles.blur}>
         <View style={styles.row}>
           {tabs.map((tab) => (
             <TabButton
@@ -95,14 +95,14 @@ export function TabBar({ tabs, activeKey, onTabPress }: TabBarProps) {
 const styles = StyleSheet.create({
   wrapper: {
     position: "absolute",
-    left: Spacing.lg,
-    right: Spacing.lg,
-    bottom: Spacing.lg,
+    left: Layout.tabBar.horizontalInset,
+    right: Layout.tabBar.horizontalInset,
+    bottom: Layout.tabBar.bottomOffset,
   },
   blur: {
     borderRadius: Radius.sheet,
     overflow: "hidden",
-    backgroundColor: "rgba(17,17,39,0.55)",
+    backgroundColor: Layout.tabBar.backgroundColor,
   },
   row: {
     flexDirection: "row",

@@ -1,7 +1,5 @@
 export { StatCard } from "./StatCard";
 export type { StatCardProps, StatAccent } from "./StatCard";
-export { CouponCard } from "./CouponCard";
-export type { CouponCardProps } from "./CouponCard";
 export { RoutineCard } from "./RoutineCard";
 export type { RoutineCardProps } from "./RoutineCard";
 export { PointsHomeCard } from "./PointsHomeCard";

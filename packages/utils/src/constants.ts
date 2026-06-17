@@ -10,10 +10,22 @@ export const ROUTINE = {
   NOTIFICATION_LEAD_MINUTES: 5,
 } as const;
 
+/** Session tracking and anti-fraud */
+export const SESSION = {
+  POINTS_PER_VERIFIED_KM: 1,
+  DAILY_POINTS_CAP: 300,
+  MAX_SPEED_KMH: 250,
+  MAX_GPS_ACCURACY_METERS: 100,
+  DEFAULT_FUEL_PRICE_CAD: 1.65,
+  DEFAULT_FUEL_L100KM: 8.5,
+  DEFAULT_DEPRECIATION_PER_KM: 0.18,
+  GPS_BATCH_MAX: 20,
+} as const;
+
 /** Points economy */
 export const POINTS = {
   /** Points earned per km driven */
-  PER_KM: 10,
+  PER_KM: 1,
   /** Level thresholds */
   LEVELS: {
     bronze: 0,

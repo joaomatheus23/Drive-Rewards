@@ -13,7 +13,7 @@ export default function Index() {
 
   if (!isHydrated) return null;
 
-  if (user?.role === "partner_staff") {
+  if (user?.role === "partner_staff" || user?.role === "partner_owner") {
     return <Redirect href="/(staff)/scanner" />;
   }
 

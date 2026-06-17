@@ -14,6 +14,8 @@ const vehicleSchema = new Schema(
     model: { type: String, trim: true },
     year: { type: Number, min: 1990, max: 2030 },
     licensePlate: { type: String, trim: true, uppercase: true },
+    fuelConsumptionL100km: { type: Number, min: 1, max: 50, default: 8.5 },
+    depreciationRatePerKm: { type: Number, min: 0, max: 2, default: 0.18 },
   },
   { _id: false },
 );
